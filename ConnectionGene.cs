@@ -12,4 +12,8 @@ public class ConnectionGene {
         this.expressed = expressed;
         this.innovation = innovation;
     }
+
+    public ConnectionGene copy() {
+        return new ConnectionGene(inNode, outNode, weight, expressed, innovation);
+    }
 }
