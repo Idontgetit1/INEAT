@@ -2,19 +2,22 @@ using System.Collections.Generic;
 
 public class NodeGene{
     public int id;
-    List<int> inputs;
-    List<int> outputs;
 
-    public NodeGene(int id){
+    public enum TYPE {
+        INPUT,
+        HIDDEN,
+        OUTPUT
+    }
+
+    public TYPE type;
+
+    public NodeGene(TYPE type, int id){
         this.id = id;
-        inputs = new List<int>();
-        outputs = new List<int>();
+        this.type = type;
     }
 
     public NodeGene copy(){
-        NodeGene copy = new NodeGene(id);
-        copy.inputs = new List<int>(inputs);
-        copy.outputs = new List<int>(outputs);
+        NodeGene copy = new NodeGene(type, id);
         return copy;
     }
 }
