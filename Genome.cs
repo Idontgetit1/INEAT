@@ -6,13 +6,14 @@ public class Genome {
     public Dictionary<int, ConnectionGene> connections;
     public Dictionary<int, NodeGene> nodes;
     private Random random;
-    private int innovation = 0;
     private List<int> innovations = new List<int>();
+    public InnovationGenerator innovation;
 
     public Genome() {
         connections = new Dictionary<int, ConnectionGene>();
         nodes = new Dictionary<int, NodeGene>();
         random = new Random();
+        innovation = new InnovationGenerator();
     }
 
     public void addConnectionMutation(int inNode, int outNode) {
@@ -29,9 +30,8 @@ public class Genome {
         }
 
         // create connection
-        innovation++;
-        ConnectionGene newConnection = new ConnectionGene(inNode, outNode, (float)random.NextDouble() * 2 - 1, true, innovation);
-        connections.Add(innovation, newConnection);
+        ConnectionGene newConnection = new ConnectionGene(inNode, outNode, (float)random.NextDouble() * 2 - 1, true, innovation.getInnovation());
+        addConnectionGene(newConnection);
             
     }
 
@@ -49,10 +49,8 @@ public class Genome {
             NodeGene newNode = new NodeGene(id);
             
             // create new Connections
-            innovation++;
-            ConnectionGene inToNew = new ConnectionGene(inNode, id, 1, true, innovation);
-            innovation++;
-            ConnectionGene newToOut = new ConnectionGene(id, outNode, connections[connection].weight, true, innovation);
+            ConnectionGene inToNew = new ConnectionGene(inNode, id, 1, true, innovation.getInnovation());
+            ConnectionGene newToOut = new ConnectionGene(id, outNode, connections[connection].weight, true, innovation.getInnovation());
 
             // put node in dict
             addNodeGene(newNode);

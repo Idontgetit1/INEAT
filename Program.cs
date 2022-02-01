@@ -6,16 +6,18 @@ namespace INEAT
 {
     class Program
     {
+        
         static void Main(string[] args)
         {
+
             Genome genome = new Genome();
 
             genome.addNodeGene(new NodeGene(0));
             genome.addNodeGene(new NodeGene(1));
             genome.addNodeGene(new NodeGene(2));
 
-            genome.addConnectionGene(new ConnectionGene(0, 2, 1, true, 0));
-            genome.addConnectionGene(new ConnectionGene(1, 2, 1, true, 1));
+            genome.addConnectionGene(new ConnectionGene(0, 2, 1, true, genome.innovation.getInnovation()));
+            genome.addConnectionGene(new ConnectionGene(1, 2, 1, true, genome.innovation.getInnovation()));
 
             // print genome connections
             Console.WriteLine("Genome connections:");
