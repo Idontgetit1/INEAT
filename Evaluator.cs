@@ -9,10 +9,10 @@ public abstract class Evaluator {
     private int populationSize;
     private Dictionary<Genome, Species> speciesDict;
     private Dictionary<Genome, float> scoreMap;
-    private float highestScore;
-    private Genome fittestGenome;
+    public float highestScore;
+    public Genome fittestGenome;
     private List<Genome> genomes;
-    private List<Species> species;
+    public List<Species> species;
     private List<Genome> nextGenGenomes;
     const float COMPATIBILITY_THRESHOLD = 3.0f;
     const float MUTATION_RATE = 0.1f;
@@ -65,9 +65,9 @@ public abstract class Evaluator {
         }
 
         // remove unused species
-        foreach (Species s in species) {
-            if (s.members.Count == 0) {
-                species.Remove(s);
+        for(int i = species.Count - 1; i >= 0; i--) {
+            if (species[i].members.Count == 0) {
+                species.RemoveAt(i);
             }
         }
 

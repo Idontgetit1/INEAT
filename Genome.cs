@@ -10,7 +10,7 @@ public class Genome {
     const float PROBABILITY_PERTURB = 0.9f;
     const float C1 = 1.0f;
     const float C2 = 1.0f;
-    const float C3 = 1.0f;
+    const float C3 = 0.4f;
 
     public Genome() {
         connections = new Dictionary<int, ConnectionGene>();
@@ -71,7 +71,6 @@ public class Genome {
         // calculate the compatibility distance
         float d = (C1 * excessGenes) / N + (C2 * disjointGenes) / N + (C3 * averageWeightDifference);
 
-        Console.WriteLine("excessGenes: " + excessGenes + " disjointGenes: " + disjointGenes + " averageWeightDifference: " + averageWeightDifference + " N: " + N + " d: " + d);
 
         return d;
     }
@@ -102,17 +101,21 @@ public class Genome {
 
             bool connectionImpossible = false;
             if (node1.type == NodeGene.TYPE.INPUT && node2.type == NodeGene.TYPE.INPUT){
+                // Console.WriteLine("Connection impossible");
                 connectionImpossible = true;
             } else if (node1.type == NodeGene.TYPE.OUTPUT && node2.type == NodeGene.TYPE.OUTPUT) {
+                // Console.WriteLine("Connection impossible");
                 connectionImpossible = true;
             }
 
             bool connectionExists = false;
             foreach (ConnectionGene con in connections.Values) {
                 if (con.inNode == node1.id && con.outNode == node2.id) {
+                    // Console.WriteLine("Connection already exists");
                     connectionExists = true;
                     break;
                 } else if (con.inNode == node2.id && con.outNode == node1.id) {
+                    // Console.WriteLine("Connection already exists");
                     connectionExists = true;
                     break;
                 }
@@ -127,14 +130,15 @@ public class Genome {
             success = true;
         }
 
-        if (success == false) {
-            Console.WriteLine("addConnectionMutation failed");
-        }
+        // if (success == false) {
+        //     Console.WriteLine("addConnectionMutation failed");
+        // }
             
     }
 
     public void addNodeMutation(Counter connectionInnovation, Counter nodeInnovation, Random r) {
-        ConnectionGene con = connections[innovations[r.Next(innovations.Count)]];
+        var conns = new List<ConnectionGene>(connections.Values);
+        ConnectionGene con = conns[r.Next(conns.Count)];
 
         NodeGene inNode = nodes[con.inNode];
         NodeGene outNode = nodes[con.outNode];
