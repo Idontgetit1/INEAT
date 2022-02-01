@@ -10,12 +10,62 @@ public class Genome {
     public InnovationGenerator innovation;
 
     const float PROBABILITY_PERTURB = 0.1f;
+    const float C1 = 1.0f;
+    const float C2 = 1.0f;
+    const float C3 = 1.0f;
 
     public Genome() {
         connections = new Dictionary<int, ConnectionGene>();
         nodes = new Dictionary<int, NodeGene>();
         random = new Random();
         innovation = new InnovationGenerator();
+    }
+
+    public static float compatibilityDistance(Genome genome1, Genome genome2){
+        // calculate the compatibility distance between two genomes
+        // is calculated by (C1*E)/N + (C2*D)/N + C3*W, where E is the number of excess genes, D is the number of disjoint genes, and W is the average weight differences of matching genes
+        // N is the number of genes in the larger genome (normalize to 1 if both are smaller that 20 genes) and C1, C2, C3 are constants
+
+        // calculate the number of excess genes
+        int excessGenes = 0;
+        foreach (KeyValuePair<int, ConnectionGene> connection in genome2.connections) {
+            if (!genome1.connections.ContainsKey(connection.Key)) {
+                excessGenes++;
+            }
+        }
+
+        // calculate the number of disjoint genes
+        int disjointGenes = 0;
+        foreach (KeyValuePair<int, ConnectionGene> connection in genome1.connections) {
+            if (!genome2.connections.ContainsKey(connection.Key)) {
+                disjointGenes++;
+            }
+        }
+
+        // calculate the average weight differences of matching genes
+        float averageWeightDifference = 0;
+        int matchingGenes = 0;
+        foreach (KeyValuePair<int, ConnectionGene> connection in genome1.connections) {
+            if (genome2.connections.ContainsKey(connection.Key)) {
+                averageWeightDifference += Math.Abs(connection.Value.weight - genome2.connections[connection.Key].weight);
+                matchingGenes++;
+            }
+        }
+        averageWeightDifference /= matchingGenes;
+
+        // calculate N
+        int N = genome1.connections.Count > genome2.connections.Count ? genome1.connections.Count : genome2.connections.Count;
+        // normalize to genome size
+        if (N < 20) {
+            N = 1;
+        }
+
+        // calculate the compatibility distance
+        float d = (C1 * excessGenes) / N + (C2 * disjointGenes) / N + (C3 * averageWeightDifference);
+
+        Console.WriteLine("excessGenes: " + excessGenes + " disjointGenes: " + disjointGenes + " averageWeightDifference: " + averageWeightDifference + " N: " + N + " d: " + d);
+
+        return d;
     }
 
     public void addConnectionMutation(int inNode, int outNode) {

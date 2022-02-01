@@ -10,31 +10,36 @@ namespace INEAT
         static void Main(string[] args)
         {
 
-            Genome genome = new Genome();
+            Genome genome1 = new Genome();
 
-            genome.addNodeGene(new NodeGene(0));
-            genome.addNodeGene(new NodeGene(1));
-            genome.addNodeGene(new NodeGene(2));
+            genome1.addNodeGene(new NodeGene(0));
+            genome1.addNodeGene(new NodeGene(1));
+            genome1.addNodeGene(new NodeGene(2));
+            genome1.addNodeGene(new NodeGene(3));
 
-            genome.addConnectionGene(new ConnectionGene(0, 1, 1, true, genome.innovation.getInnovation()));
-            genome.addConnectionGene(new ConnectionGene(1, 2, 1, true, genome.innovation.getInnovation()));
+            genome1.addConnectionGene(new ConnectionGene(0, 1, 2, true, genome1.innovation.getInnovation()));
+            genome1.addConnectionGene(new ConnectionGene(1, 2, 2, true, genome1.innovation.getInnovation()));
+            genome1.addConnectionGene(new ConnectionGene(0, 3, 1, true, genome1.innovation.getInnovation()));
+            genome1.addConnectionGene(new ConnectionGene(3, 2, 1, true, genome1.innovation.getInnovation()));
+
+            
+
+            Genome genome2 = new Genome();
+
+            genome2.addNodeGene(new NodeGene(0));
+            genome2.addNodeGene(new NodeGene(1));
+            genome2.addNodeGene(new NodeGene(2));
+            genome2.addNodeGene(new NodeGene(3));
 
 
-            // print genome connections
-            Console.WriteLine("Genome connections:");
-            foreach (ConnectionGene connection in genome.connections.Values)
-            {
-                Console.WriteLine("inNode: " + connection.inNode + " outNode: " + connection.outNode + " weight: " + connection.weight + " expressed: " + connection.expressed + " innovation: " + connection.innovation);
-            }
+            genome2.addConnectionGene(new ConnectionGene(0, 3, 3, true, genome2.innovation.getInnovation()));
+            genome2.addConnectionGene(new ConnectionGene(3, 2, 3, true, genome2.innovation.getInnovation()));
+            
 
-            genome.mutation();
 
-            // print genome connections
-            Console.WriteLine("Genome connections:");
-            foreach (ConnectionGene connection in genome.connections.Values)
-            {
-                Console.WriteLine("inNode: " + connection.inNode + " outNode: " + connection.outNode + " weight: " + connection.weight + " expressed: " + connection.expressed + " innovation: " + connection.innovation);
-            }
+            float comp = Genome.compatibilityDistance(genome1, genome2);
+
+            Console.WriteLine(comp);
         }
     }
 }
