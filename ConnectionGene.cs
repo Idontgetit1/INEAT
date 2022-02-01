@@ -1,7 +1,15 @@
 public class ConnectionGene {
-    NodeGene inNode;
-    NodeGene outNode;
-    float weight;
-    bool expressed;
-    int innovation;
+    public int inNode;
+    public int outNode;
+    public float weight;
+    public bool expressed;
+    public int innovation;
+
+    public ConnectionGene(int inNode, int outNode, float weight, bool expressed, int innovation) {
+        this.inNode = inNode;
+        this.outNode = outNode;
+        this.weight = weight;
+        this.expressed = expressed;
+        this.innovation = innovation;
+    }
 }
