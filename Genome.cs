@@ -55,11 +55,11 @@ public class Genome {
             ConnectionGene newToOut = new ConnectionGene(id, outNode, connections[connection].weight, true, innovation);
 
             // put node in dict
-            nodes.Add(id, newNode);
+            addNodeGene(newNode);
 
             // put conn in dict
-            connections.Add(innovation, inToNew);
-            connections.Add(innovation, newToOut);
+            addConnectionGene(inToNew);
+            addConnectionGene(newToOut);
         }
     }
 
