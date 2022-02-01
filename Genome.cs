@@ -63,7 +63,7 @@ public class Genome {
         }
     }
 
-    public Genome crossover(Genome parent1, Genome parent2){
+    public static Genome crossover(Genome parent1, Genome parent2, Random r){
         // parent1 is stronger
         
         Genome child = new Genome();
@@ -75,7 +75,7 @@ public class Genome {
 
         foreach (ConnectionGene connection in parent1.connections.Values) {
             if (parent2.connections.ContainsKey(connection.innovation)){ // gene matching
-                ConnectionGene childConnection = random.NextDouble() < 0.5 ? connection.copy() : parent2.connections[connection.innovation].copy();
+                ConnectionGene childConnection = r.NextDouble() < 0.5 ? connection.copy() : parent2.connections[connection.innovation].copy();
                 child.addConnectionGene(childConnection);
             }else{ // gene disjoint or excess
                 // copy from parent1
