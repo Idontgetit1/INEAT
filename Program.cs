@@ -16,7 +16,9 @@ namespace INEAT
             genome.addNodeGene(new NodeGene(1));
             genome.addNodeGene(new NodeGene(2));
 
+            genome.addConnectionGene(new ConnectionGene(0, 1, 1, true, genome.innovation.getInnovation()));
             genome.addConnectionGene(new ConnectionGene(1, 2, 1, true, genome.innovation.getInnovation()));
+
 
             // print genome connections
             Console.WriteLine("Genome connections:");
@@ -25,8 +27,7 @@ namespace INEAT
                 Console.WriteLine("inNode: " + connection.inNode + " outNode: " + connection.outNode + " weight: " + connection.weight + " expressed: " + connection.expressed + " innovation: " + connection.innovation);
             }
 
-            genome.addConnectionMutation(0, 2);
-            genome.addNodeMutation(1);
+            genome.mutation();
 
             // print genome connections
             Console.WriteLine("Genome connections:");
