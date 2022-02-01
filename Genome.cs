@@ -9,6 +9,8 @@ public class Genome {
     private List<int> innovations = new List<int>();
     public InnovationGenerator innovation;
 
+    const float PROBABILITY_PERTURB = 0.1f;
+
     public Genome() {
         connections = new Dictionary<int, ConnectionGene>();
         nodes = new Dictionary<int, NodeGene>();
@@ -58,6 +60,16 @@ public class Genome {
             // put conn in dict
             addConnectionGene(inToNew);
             addConnectionGene(newToOut);
+        }
+    }
+
+    public void mutation() {
+        foreach (ConnectionGene connection in connections.Values) {
+            if (random.NextDouble() < PROBABILITY_PERTURB) {
+                connection.weight *= (float)random.NextDouble() * 2 - 1;
+            }else{
+                connection.weight = (float)random.NextDouble() * 2 - 1;
+            }
         }
     }
 
