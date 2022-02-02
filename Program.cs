@@ -26,7 +26,7 @@ namespace INEAT
             genome.addConnectionGene(new ConnectionGene(n1,n3,0.5f,true,c1));
             genome.addConnectionGene(new ConnectionGene(n2,n3,0.5f,true,c2));
 
-            Eval eval = new Eval(20, genome, nodeInnovation, connectionInnovation);
+            Eval eval = new Eval(100, genome, nodeInnovation, connectionInnovation);
 
             for (int i = 0; i < 100; i++)
             {
@@ -47,6 +47,10 @@ namespace INEAT
                 Console.Write("\tHighest Nodes: " + eval.fittestGenome.nodes.Count);
                 Console.Write("\tHighest Output: " + eval.fittestGenome.output);
             }
+
+            GenPrinter printer = new GenPrinter();
+
+            printer.printGenome(eval.fittestGenome, "fittestGenome.png");
         }
 
         public static float[] processNetwork(float[] inputs, Genome genome)
@@ -133,7 +137,7 @@ namespace INEAT
             // difference to 100
             // Console.WriteLine("Size scores: " + scores.Count);
 
-            return 1000f/Math.Abs(genome.output - 100);
+            return 1000f/MathF.Abs(100f - genome.output);
         }
     }
 
