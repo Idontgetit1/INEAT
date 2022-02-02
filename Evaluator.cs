@@ -11,10 +11,10 @@ public abstract class Evaluator {
     private Dictionary<Genome, float> scoreMap;
     public float highestScore;
     public Genome fittestGenome;
-    private List<Genome> genomes;
+    public List<Genome> genomes;
     public List<Species> species;
     private List<Genome> nextGenGenomes;
-    const float COMPATIBILITY_THRESHOLD = 3.0f;
+    const float COMPATIBILITY_THRESHOLD = 5.0f;
     const float MUTATION_RATE = 0.1f;
     const float ADD_CONNECTION_RATE = 0.05f;
     const float ADD_NODE_RATE = 0.05f;

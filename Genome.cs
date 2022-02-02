@@ -11,6 +11,7 @@ public class Genome {
     const float C1 = 1.0f;
     const float C2 = 1.0f;
     const float C3 = 0.4f;
+    public float output = 0f;
 
     public Genome() {
         connections = new Dictionary<int, ConnectionGene>();
@@ -28,6 +29,60 @@ public class Genome {
         }
     }
 
+    public List<int> getInputNodes(){
+        List<int> inputNodes = new List<int>();
+        foreach (KeyValuePair<int, NodeGene> entry in nodes) {
+            if (entry.Value.type == NodeGene.TYPE.INPUT) {
+                inputNodes.Add(entry.Key);
+            }
+        }
+
+        return inputNodes;
+    }
+
+    public List<int> getOutputNodes(){
+        List<int> outputNodes = new List<int>();
+        foreach (KeyValuePair<int, NodeGene> entry in nodes) {
+            if (entry.Value.type == NodeGene.TYPE.OUTPUT) {
+                outputNodes.Add(entry.Key);
+            }
+        }
+
+        return outputNodes;
+    }
+
+    public List<int> getHiddenNodes(){
+        List<int> hiddenNodes = new List<int>();
+        foreach (KeyValuePair<int, NodeGene> entry in nodes) {
+            if (entry.Value.type == NodeGene.TYPE.HIDDEN) {
+                hiddenNodes.Add(entry.Key);
+            }
+        }
+
+        return hiddenNodes;
+    }
+
+    public List<int> getNodes(){
+        List<int> nodes = new List<int>();
+        foreach (KeyValuePair<int, NodeGene> entry in this.nodes) {
+            nodes.Add(entry.Key);
+        }
+
+        return nodes;
+    }
+
+    public List<ConnectionGene> getConnections() {
+        List<ConnectionGene> connectionGenes = new List<ConnectionGene>();
+        foreach (KeyValuePair<int, ConnectionGene> entry in connections) {
+            connectionGenes.Add(entry.Value);
+        }
+
+        return connectionGenes;
+    }
+
+    public NodeGene getNode(int id) {
+        return nodes[id];
+    }
 
     public static float compatibilityDistance(Genome genome1, Genome genome2){
         // calculate the compatibility distance between two genomes

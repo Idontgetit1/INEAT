@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 
 // execute and test the program
@@ -25,17 +26,101 @@ namespace INEAT
             genome.addConnectionGene(new ConnectionGene(n1,n3,0.5f,true,c1));
             genome.addConnectionGene(new ConnectionGene(n2,n3,0.5f,true,c2));
 
-            Evaluator eval = new Eval(100, genome, nodeInnovation, connectionInnovation);
+            Eval eval = new Eval(20, genome, nodeInnovation, connectionInnovation);
 
-            for (int i = 0; i < 500; i++)
+            for (int i = 0; i < 100; i++)
             {
+                foreach (Genome g in eval.genomes)
+                {
+                    g.output = Program.processNetwork(new float[]{1, 2}, g)[0];
+                }
                 eval.evaluate();
+
+                
+                
+                
+
                 Console.WriteLine();
                 Console.Write("Generation: " + i);
                 Console.Write("\tHighest Fitness: " + eval.highestScore);
                 Console.Write("\tAmount of species: " + eval.species.Count);
-                Console.Write("\tHighest Connections: " + eval.fittestGenome.connections.Count);
+                Console.Write("\tHighest Nodes: " + eval.fittestGenome.nodes.Count);
+                Console.Write("\tHighest Output: " + eval.fittestGenome.output);
             }
+        }
+
+        public static float[] processNetwork(float[] inputs, Genome genome)
+        {
+            // get genome input nodes
+            List<int> inputNodes = genome.getInputNodes();
+
+            // get genome output nodes
+            List<int> outputNodes = genome.getOutputNodes();
+
+            float[] outputs = new float[outputNodes.Count];
+
+            Dictionary<int, float> nodeValues = new Dictionary<int, float>();
+
+            List<int> allNodes = genome.getNodes();
+
+            // set all nodes to 0
+            foreach (int node in allNodes)
+            {
+                nodeValues.Add(node, 0);
+            }
+
+            // set input nodes to input values
+            for (int i = 0; i < inputs.Length; i++)
+            {
+                nodeValues[inputNodes[i]] = inputs[i];
+            }
+            
+            List<ConnectionGene> connections = new List<ConnectionGene>();
+            List<ConnectionGene> lastConnections = new List<ConnectionGene>();
+            List<ConnectionGene> lastConnectionsTemp = new List<ConnectionGene>();
+
+            // first input nodes
+            // get connections from input nodes to all other nodes
+            foreach (int node in inputNodes) {
+                foreach (ConnectionGene connection in genome.connections.Values) {
+                    if (connection.inNode == node && connection.expressed) {
+                        connections.Add(connection);
+                        lastConnections.Add(connection);
+                    }
+                }
+            }
+
+            bool hiddenLayersLeft = true;
+            while (hiddenLayersLeft) {
+                hiddenLayersLeft = false;
+                foreach (ConnectionGene connection in lastConnections) {
+                    if (genome.getNode(connection.outNode).type == NodeGene.TYPE.HIDDEN) {
+                        hiddenLayersLeft = true;
+                        // get connections from node to all other nodes
+                        foreach (ConnectionGene connection2 in genome.connections.Values) {
+                            if (connection2.inNode == connection.outNode && connection2.expressed) {
+                                connections.Add(connection2);
+                                lastConnectionsTemp.Add(connection2);
+                            }
+                        }
+                    }
+                }
+
+                lastConnections = lastConnectionsTemp;
+                lastConnectionsTemp = new List<ConnectionGene>();
+            }
+
+            // calculate node values
+            foreach (ConnectionGene connection in connections) {
+                nodeValues[connection.outNode] += connection.weight * nodeValues[connection.inNode];
+            }
+
+            // set output nodes to node values
+            foreach (int node in outputNodes) {
+                outputs[outputNodes.IndexOf(node)] = nodeValues[node];
+            }
+
+            return outputs;
         }
     }
 
@@ -43,9 +128,13 @@ namespace INEAT
 
         public Eval(int maxGenerations, Genome genome, Counter nodeInnovation, Counter connectionInnovation) : base(maxGenerations, genome, nodeInnovation, connectionInnovation) {
         }
+
         public override float evaluateGenome(Genome genome) {
             // difference to 100
-            return 1000f/Math.Abs(genome.connections.Count - 100);
+            // Console.WriteLine("Size scores: " + scores.Count);
+
+            return 1000f/Math.Abs(genome.output - 100);
         }
     }
+
 }
