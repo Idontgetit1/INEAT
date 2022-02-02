@@ -2,17 +2,23 @@
 
 This is my go at implementing NEAT in C#.
 
-**Will it be good ?**
+**Is it good ?**
 
 *probably not*
 
 
 
-**Will it work when finished ?**
+**Is it finished ?**
 
-*probably not*
+*probably ?*
 
 
 **Do I know what I am doing ?**
 
 *probably not*
+
+
+
+**Is this a proper Implementation of NEAT**
+
+*I don't know*
